@@ -45,6 +45,11 @@ public class ClubController {
         model.addAttribute("club", club);
         return "clubs-create";
     }
+    @GetMapping("/clubs/{clubId}/delete")
+    public String deleteClub(@PathVariable("clubId")Long clubId) {
+        clubService.delete(clubId);
+        return "redirect:/clubs";
+    }
 
     @PostMapping("/clubs/new")
     public String saveClub(@Valid @ModelAttribute("club") ClubDto clubDto, BindingResult result, Model model) {
