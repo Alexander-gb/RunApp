@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private String name;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
