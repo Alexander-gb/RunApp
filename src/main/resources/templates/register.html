@@ -1,0 +1,123 @@
+<html
+        xmlns:th="http://thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <title>Register</title>
+    <style>
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .login-form input[type="text"]:focus,
+        .login-form input[type="password"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .login-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-form .btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+
+        .login-form .btn-black {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .login-form .btn-black:hover {
+            background-color: #333;
+        }
+
+        .login-form .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .login-form .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .login-form .text-danger {
+            color: #dc3545;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<section layout:fragment="body" class="py-5">
+
+    <div class="main">
+        <div class="col-md-6 col-sm-12">
+            <div th:if="${param.fail}" class="alert alert-success">
+                Username has taken
+            </div>
+            <div class="login-form">
+                <form method="post" role="form" th:action="@{/register/save}" th:object="${user}">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Username"
+                                th:field="*{username}">
+                    </div>
+                    <p th:if="${#fields.hasErrors('username')}" class="text-danger"></p>
+                    <div class="form-group col-md-6">
+                        <label>Email</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Email"
+                                th:field="*{email}">
+                    </div>
+                    <p th:if="${#fields.hasErrors('email')}" class="text-danger"></p>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input
+                                type="password"
+                                class="form-control"
+                                placeholder="Password"
+                                th:field="*{password}">
+                    </div>
+                    <p th:if="${#fields.hasErrors('password')}" class="text-danger"></p>
+                    <button th:href="@{/login}" type="submit" class="btn btn-black">Login</button>
+                    <button th:href="@{/register}" type="submit" class="btn btn-secondary">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+</body>
+</html>
