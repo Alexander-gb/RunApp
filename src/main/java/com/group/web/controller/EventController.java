@@ -10,15 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-
+@RequestMapping("/events")
 public class EventController {
     private EventService eventService;
 
@@ -27,13 +24,13 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @GetMapping("/events")
+    @GetMapping
     public String eventList(Model model) {
         List<EventDto> events = eventService.findAllEvents();
         model.addAttribute("events", events);
         return "events-list";
     }
-    @GetMapping("/events/{eventId}")
+    @GetMapping("/{eventId}")
     public String viewEvent(@PathVariable("eventId") Long eventId, Model model) {
         EventDto eventDto = eventService.findByEventId(eventId);
         model.addAttribute("event", eventDto);
@@ -41,20 +38,20 @@ public class EventController {
 
     }
 
-    @GetMapping("/events/{clubId}/new")
+    @GetMapping("/{clubId}/new")
     public String createEventForm(@PathVariable("clubId") Long clubId, Model model) {
         Event event = new Event();
         model.addAttribute("clubId", clubId);
         model.addAttribute("event", event);
         return "events-create";
     }
-    @GetMapping("/events/{eventId}/edit")
+    @GetMapping("/{eventId}/edit")
     public String editEventForm(@PathVariable("eventId") Long eventId, Model model) {
         EventDto event = eventService.findByEventId(eventId);
         model.addAttribute("event", event);
         return "events-edit";
     }
-    @PostMapping("events/{clubId}")
+    @PostMapping("/{clubId}")
     public String createEvent(@PathVariable("clubId") Long clubId, @ModelAttribute("event")EventDto eventDto,
                               BindingResult result,
                               Model model) {
@@ -65,7 +62,7 @@ public class EventController {
         eventService.createEvent(clubId, eventDto);
         return "redirect:/clubs/" + clubId;
     }
-    @PostMapping("/events/{eventId}/edit")
+    @PostMapping("/{eventId}/edit")
     public String updateEvent(@PathVariable("eventId") Long eventId,
                              @Valid @ModelAttribute("event") EventDto event,
                              BindingResult result, Model model) {
@@ -79,7 +76,7 @@ public class EventController {
         eventService.updateEvent(event);
         return "redirect:/events";
     }
-    @GetMapping("/events/{eventId}/delete")
+    @GetMapping("/{eventId}/delete")
     public String deleteEvent(@PathVariable("eventId") Long eventId) {
         eventService.deleteEvent(eventId);
         return "redirect:/events";
