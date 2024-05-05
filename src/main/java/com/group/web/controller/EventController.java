@@ -4,7 +4,10 @@ package com.group.web.controller;
 import com.group.web.dto.ClubDto;
 import com.group.web.dto.EventDto;
 import com.group.web.models.Event;
+import com.group.web.models.UserEntity;
+import com.group.web.security.SecurityUtil;
 import com.group.web.service.EventService;
+import com.group.web.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,21 +21,38 @@ import java.util.List;
 @RequestMapping("/events")
 public class EventController {
     private EventService eventService;
+    private UserService userService;
 
     @Autowired
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, UserService userService) {
+        this.userService = userService;
         this.eventService = eventService;
     }
 
     @GetMapping
     public String eventList(Model model) {
+        UserEntity user = new UserEntity();
         List<EventDto> events = eventService.findAllEvents();
+        String username = SecurityUtil.getSessionUser();
+        if(username != null) {
+            user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("user", user);
         model.addAttribute("events", events);
         return "events-list";
     }
     @GetMapping("/{eventId}")
     public String viewEvent(@PathVariable("eventId") Long eventId, Model model) {
+        UserEntity user = new UserEntity();
         EventDto eventDto = eventService.findByEventId(eventId);
+        String username = SecurityUtil.getSessionUser();
+        if(username != null) {
+            user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("club", eventDto);
+        model.addAttribute("user", user);
         model.addAttribute("event", eventDto);
         return "events-detail";
 

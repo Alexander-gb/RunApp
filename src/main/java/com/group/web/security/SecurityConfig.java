@@ -28,12 +28,35 @@ public class SecurityConfig {
     }
 
 
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+//        http.csrf().disable()
+//                .authorizeHttpRequests()
+//                .requestMatchers("/login", "/register", "/clubs/**", "/events/**", "/register/**", "/css/**", "/js/**")
+//                .permitAll()
+//                .and()
+//                .formLogin(form -> form
+//                        .loginPage("/login")
+//                        .defaultSuccessUrl("/clubs")
+//                        .loginProcessingUrl("/login")
+//                        .failureUrl("/login?error=true")
+//                        .permitAll()
+//                ).logout(
+//                        logout -> logout
+//                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
+//                );
+//
+//        return http.build();
+//    }
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/login", "/register", "/clubs/**", "/events/**", "/register/**", "/css/**", "/js/**")
+                .requestMatchers("/login", "/register", "/register/**", "/css/**", "/js/**")
                 .permitAll()
+                .requestMatchers("/clubs/**", "/events/**")
+                .authenticated()
                 .and()
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -48,6 +71,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
         builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
